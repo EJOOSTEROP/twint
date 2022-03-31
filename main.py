@@ -77,7 +77,7 @@ def gcp_tweets_to_db():
     comment = "TWINT webserver."
     
     # TODO: set to GCP before deployment
-    # entities = ParseFilesFromConfig(ReadConfigFileLocal())
+    #entities = ParseFilesFromConfig(ReadConfigFileLocal())
     entities = ParseFilesFromConfig(ReadConfigFileGCP())
 
     for entity in entities:
@@ -85,6 +85,9 @@ def gcp_tweets_to_db():
         group_search_id = entity["search"]
         filepath = entity["localfilepath"]
         params = {'group_entity_id': group_entity_id}
+
+        # don't want interference with same file names from file function
+        if os.path.isfile(filepath): os.remove(filepath) 
 
         # Find most recent Tweet date
         response = requests.get(url = url_latest_tweet, params = params)
